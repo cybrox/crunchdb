@@ -62,6 +62,16 @@
     }
 
     /**
+     * Truncate a chrunchDB table
+     * @param string $tablename The respective table's name
+     */
+    public function truncate($tablename){
+      $table = $this->getFile($tablename);
+      if(!file_exists($table)) throw new Exception('crunchDB: Table "'.$tablename.'" doesn\'t exists');
+      else file_put_contents($table, '[]');
+    }
+
+    /**
      * Return the path to a table's file
      * @param string $tablename The respective table's name
      * @return string The respective table's file location
