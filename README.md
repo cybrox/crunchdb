@@ -16,7 +16,8 @@ Here's a list of all functions that are currently implemented.
 
 | Method | Description |
 | --- | --- |
-| `crunchDB->version()` | Return the current crunchDB version. Useful to see if everything is set up|
+| `crunchDB->version()` | Return the current crunchDB version. Useful to see if everything is set up. |
+| `crunchDB->tables()` | List all tables (=files) that are present in this database (=directory). |
 | `crunchDB->create('table')` | Add a new table (eq. a new JSON file) with the given name. |
 | `crunchDB->truncate('table')` | Truncate the table with the given name.|
 | `crunchDB->drop('table')` | Drop the table with the given name and delete its JSON file.|

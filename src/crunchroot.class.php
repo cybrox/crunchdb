@@ -71,6 +71,17 @@
       else file_put_contents($table, '[]');
     }
 
+    public function tables(){
+      $tablelist = array();
+      if($dir = opendir($this->dbdir)){
+        while (($file = readdir($dir)) !== false){
+          if(strstr($file, '.'.$this->dbext)) $tablelist[] = str_replace('.'.$this->dbext, '', $file);
+        }
+        closedir($dir);
+      }
+      return $tablelist;
+    }
+
     /**
      * Return the path to a table's file
      * @param string $tablename The respective table's name

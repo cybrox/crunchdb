@@ -39,7 +39,7 @@
      * @param array $args An array with all arguments that will be passed to the function
      */
     public function __call($func, $args){
-      $handleInRoot = array('create', 'drop', 'alter', 'truncate', 'version');
+      $handleInRoot = array('create', 'drop', 'alter', 'truncate', 'tables', 'version');
       if($func != 'select' && $this->dbmode == 'r') throw new Exception('CrunchDB is running in read mode');
       if(in_array($func, $handleInRoot)) return call_user_func_array(array($this->_crunchRoot(), $func), $args);
       if(method_exists('crunchTable', $func)){
