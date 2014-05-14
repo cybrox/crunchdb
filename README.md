@@ -17,13 +17,13 @@ Here's a list of all functions that are currently implemented.
 | Method | Description |
 | --- | --- |
 | `crunchDB->version()` | Return the current crunchDB version. Useful to see if everything is set up|
-| `crunchDB->create('tablename')` | Add a new table (eq. a new JSON file) with the given name. |
-| `crunchDB->truncate('tablename')` | Truncate the table with the given name.|
-| `crunchDB->drop('tablename')` | Drop the table with the given name and delete its JSON file.|
-| `crunchDB->alter('tablename', 'newname)` | Rename the table called `tablename` to `newname`.|
-| `crunchDB->insert('tablename', array())` | Insert a row with the information stored in the `data` array into the table `tablename`.|
-| `crunchDB->count('tablename', 'key', 'value')` | Count all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to count **all** entries in this table.|
-| `crunchDB->select('tablename', 'key', 'value')` | Select all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to select **all** entries in this table.|
-| `crunchDB->update('tablename', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. All fields that are set in the array will be updated. |
-| `crunchDB->updateAll('tablename', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. The full row will be replaced with the given array. |
-| `crunchDB->delete('tablename', 'key', 'value')` | Delete all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to delete **all** entries in this table (=truncate).|
+| `crunchDB->create('table')` | Add a new table (eq. a new JSON file) with the given name. |
+| `crunchDB->truncate('table')` | Truncate the table with the given name.|
+| `crunchDB->drop('table')` | Drop the table with the given name and delete its JSON file.|
+| `crunchDB->alter('table', 'newname)` | Rename the table called `tablename` to `newname`.|
+| `crunchDB->insert('table', array())` | Insert a row with the information stored in the `data` array into the table `tablename`.|
+| `crunchDB->count('table', 'key', 'value')` | Count all entries in the table `tablename` where `key` matches `value`. You can use `count('table', '*')` to count **all** entries in this table.|
+| `crunchDB->select('table', 'key', 'value')` | Select all entries in the table `tablename` where `key` matches `value`. You can use `count('table', '*')` to select **all** entries in this table.|
+| `crunchDB->update('table', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. All fields that are set in the array will be updated. |
+| `crunchDB->updateAll('table', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. The full row will be replaced with the given array. |
+| `crunchDB->delete('table', 'key', 'value')` | Delete all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to delete **all** entries in this table (=truncate).|
