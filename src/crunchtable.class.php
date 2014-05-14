@@ -29,7 +29,6 @@
      * Class destructor, will save the changes to the json file
      */
     public function __destruct(){
-      foreach($this->data as $d) if(!empty($d['dbindex'])) unset($d['dbindex']);
       file_put_contents($this->table, json_encode($this->data));
     }
 
