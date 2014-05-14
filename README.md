@@ -25,4 +25,4 @@ Here's a list of all functions that are currently implemented.
 | `crunchDB -> select('tablename', 'key', 'value')` | Select all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to select **all** entries in this table.|
 | `crunchDB -> update('tablename', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. All fields that are set in the array will be updated. |
 | `crunchDB -> updateAll('tablename', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. The full row will be replaced with the given array. |
-| `crunchDB -> delete('tablename', 'key', 'value')` | Deleteall entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to delete **all** entries in this table (=truncate).|
+| `crunchDB -> delete('tablename', 'key', 'value')` | Delete all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to delete **all** entries in this table (=truncate).|
