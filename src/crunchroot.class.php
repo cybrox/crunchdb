@@ -36,6 +36,7 @@
       if(strlen($tablename) < 2) throw new Exception('crunchDB: Table name is too short');
       if(file_exists($table)) throw new Exception('crunchDB: Table "'.$tablename.'" already exists');
       else file_put_contents($table, '[]');
+      return true;
     }
 
     /**
@@ -46,6 +47,7 @@
       $table = $this->getFile($tablename);
       if(!file_exists($table)) throw new Exception('crunchDB: Table "'.$tablename.'" doesn\'t exists');
       else unlink($table);
+      return true;
     }
 
     /**
@@ -59,6 +61,7 @@
       if(!file_exists($otable)) throw new Exception('crunchDB: Table "'.$tablename.'" doesn\'t exists');
       if(file_exists($ntable)) throw new Exception('crunchDB: Table "'.$tablename.'" already exists');
       rename($otable, $ntable);
+      return true;
     }
 
     /**
@@ -69,6 +72,7 @@
       $table = $this->getFile($tablename);
       if(!file_exists($table)) throw new Exception('crunchDB: Table "'.$tablename.'" doesn\'t exists');
       else file_put_contents($table, '[]');
+      return true;
     }
 
     public function tables(){
