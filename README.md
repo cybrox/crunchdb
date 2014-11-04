@@ -51,3 +51,30 @@ You can chain as many fields in there as you want to change.
 
 #### On chaining actions
 Though chaining a lot of arguments might get a bit long, it's definitely a really simple way to build *queries* for something like this. You can find a lot of examples on how to chain them in the *example.php* file.
+
+
+### Some code examples
+```
+<?php
+  $cdb->version()
+  $cdb->table('cookies')->exists()
+  $cdb->table('cookies')->create()
+  $cdb->table('cakes')->create()
+  $cdb->table('cakes')->alter('cheese')
+  $cdb->tables()
+  $cdb->table('cookies')->count()
+  $cdb->table('cookies')->insert(array("type" => "chocolate", "is" => "nice"))
+  $cdb->table('cookies')->insert(array("type" => "banana", "is" => "nice"))
+  $cdb->table('cookies')->insert(array("type" => "strawberry", "is" => "ok"))
+  $cdb->table('cookies')->raw()
+  $cdb->table('cookies')->select('*')->fetch()
+  $cdb->table('cookies')->select('*')->count()
+  $cdb->table('cookies')->select(['type', '==', 'chocolate'])->fetch()
+  $cdb->table('cookies')->select(['type', '==', 'chocolate'],['type', '==', 'banana', 'or'])->fetch()
+  $cdb->table('cookies')->select(['type', '==', 'chocolate'],['type', '==', 'banana', 'and'])->count()
+  $cdb->table('cookies')->select('*')->sort(['type'])->fetch()
+  $cdb->table('cookies')->select(['type', '==', 'strawberry'])->delete()
+  $cdb->table('cookies')->select(['type', '==', 'banana'])->update(['type', 'chocolate'])
+  $cdb->table('cookies')->select('*')->fetch()
+?>
+```
