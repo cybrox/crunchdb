@@ -66,6 +66,15 @@
     e( 'Sort the selected cookies (all) alphabetically and fetch the result' );
     f( $cdb->table('cookies')->select('*')->sort(['type'])->fetch() );
 
+    e( 'Delete the cookie with the type strawberry' );
+    f( $cdb->table('cookies')->select(['type', '==', 'strawberry'])->delete() );
+
+    e( 'Rename the banana cookie to chocolate as well' );
+    f( $cdb->table('cookies')->select(['type', '==', 'banana'])->update(['type', 'chocolate']) );
+
+    e( 'Fetch all cookies from the cookies table' );
+    f( $cdb->table('cookies')->select('*')->fetch() );
+
     e( 'Dropping all tables to end this test ' );
     $cdb->table('cookies')->drop();
     $cdb->table('cheese')->drop();
