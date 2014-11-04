@@ -11,6 +11,9 @@
  * Named after delicious cookies!
  */
 
+  define("NULLTPL", "{data:[]}");
+
+
   class crunchTable {
 
     private $tbname;
@@ -18,6 +21,7 @@
     private $tbpath;
     private $tbdata;
     private $tbbase;
+
 
     /**
      * Class constructor, create a new instance of a table
@@ -43,7 +47,6 @@
 
     /**
      * Check if a table exists 
-     *
      * @return bool $exists Indicates if the table exists
      */
     public function exists(){
@@ -53,6 +56,7 @@
 
     /**
      * Drop the selected table
+     * @return bool $success Action status indicator bool
      */
     public function drop(){
       if($this->tbexst) unlink($this->tbpath);
@@ -62,10 +66,11 @@
 
     /**
      * Truncate the selected table
+     * @return bool $success Action status indicator bool
      */
     public function truncate(){
       if($this->tbexst){ 
-        file_put_contents($this->tbpath, "{}");
+        file_put_contents($this->tbpath, NULLTPL);
         return true;
       } else {
         throw new Exception('cdb table "'.$this->tbname.' does not exist.');
@@ -76,10 +81,11 @@
 
     /**
      * Create the table if it doesn't exist yet
+     * @return bool $success Action status indicator bool
      */
     public function create(){
       if(!$this->tbexst){
-        file_put_contents($this->tbpath, "{}");
+        file_put_contents($this->tbpath, NULLTPL);
         return true;
       } else {
         throw new Exception('cdb table "'.$this->tbname.' already exists.');
@@ -91,6 +97,7 @@
     /**
      * Alter a table name
      * @param string $name The table's new name
+     * @return bool $success Action status indicator bool
      */
     public function alter($name){
       if($this->tbexst){
@@ -102,6 +109,30 @@
       } else {
         throw new Exception('cdb table "'.$this->tbname.' does not exist.');
         return false;
+      }
+    }
+
+
+    /**
+     * Select stuff from a table
+     * @param string $query SQL style query to select entries
+     * @return instance $crunchResource New resource instance
+     */
+    public function select($query){
+      return new crunchResource($this, $query);
+    }
+
+
+    /**
+     * Count data in this table
+     * @return int $count Number of rows in the table
+     */
+    public function count(){
+      if($this->tbexst){
+        return count($this->tbdata['data']);
+      } else {
+        throw new Exception('cdb table "'.$this->tbname.' does not exist.');
+        return 0;
       }
     }
 
