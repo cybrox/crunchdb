@@ -17,8 +17,8 @@
     private $tbname;
     private $tbexst;
     private $tbpath;
-    private $tbdata;
     private $tbbase;
+    public $tbdata;
 
 
     /**

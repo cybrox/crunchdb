@@ -14,9 +14,11 @@
 
   class crunchResource {
 
+    private $base;
     private $data;
     private $rawd;
     private $filt = false;
+    private $uids = array();
 
 
     /**
@@ -27,6 +29,7 @@
     public function __construct($base, $query){
       $this->tweak($base->raw());
       $this->apply($query);
+      $this->base = $base;
     }
 
 
@@ -37,6 +40,7 @@
     private function tweak($input){
       $counter = 0;
       foreach($input as $inp){
+        array_push($this->uids, $counter);
         $inp['__dbid'] = $counter;
         $this->data[] = $inp;
         $counter++;
@@ -74,8 +78,6 @@
       $com = (!empty($query[1])) ? trim($query[1]) : '==';
       $val = (!empty($query[2])) ? trim($query[2]) : '';
       $con = (!empty($query[3])) ? trim($query[3]) : 'or';
-
-      foreach($this->data as $d) array_push($uids, $d['__dbid']);
 
       foreach($dataset as $data){
         if(!empty($data[$key])){
@@ -129,9 +131,12 @@
 
     /**
      * Fetch the data in the current resource
+     * @param bool $withid Don't filter dbid if this is active
      * @return array $data The fetched data array
      */
-    public function fetch(){
+    public function fetch($withid = false){
+      if($withid) return $this->data;
+
       $res = array();
 
       foreach($this->data as $data){
@@ -149,6 +154,32 @@
      */
     public function count(){
       return count($this->data);
+    }
+
+
+    /**
+     * Delete the selected resources from the database
+     */
+    public function delete(){
+      foreach($this->data as $d) unset($this->base->tbdata['data'][$d['__dbid']]);
+      $this->base->_saveData();
+      return true;
+    }
+
+
+    /**
+     * Update keys with values
+     */
+    public function update(){
+      foreach($this->data as $data){
+        foreach(func_get_args() as $arg){
+          if($this->base->tbdata['data'][$data['__dbid']][$arg[0]] != null){
+            $this->base->tbdata['data'][$data['__dbid']][$arg[0]] = $arg[1];
+          }
+        }
+      }
+      $this->base->_saveData();
+      return true;
     }
 
 
