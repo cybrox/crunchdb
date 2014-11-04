@@ -36,12 +36,20 @@
       $this->tbbase = $base;
 
       if(file_exists($this->tbpath)){
-        $this->tbdata = json_decode(file_get_contents($this->tbpath));
+        $this->tbdata = json_decode(file_get_contents($this->tbpath), true);
         $this->tbexst = true;
       } else {
         $this->tbdata = null;
         $this->tbexst = false;
       }
+    }
+
+
+    /**
+     * Save data to the table
+     */
+    public function _saveData(){
+      file_put_contents($this->tbpath, $this->tbdata);
     }
 
 
@@ -70,7 +78,8 @@
      */
     public function truncate(){
       if($this->tbexst){ 
-        file_put_contents($this->tbpath, NULLTPL);
+        $this->tbdata = NULLTPL;
+        $this->_saveData();
         return true;
       } else {
         throw new Exception('cdb table "'.$this->tbname.' does not exist.');
@@ -85,7 +94,8 @@
      */
     public function create(){
       if(!$this->tbexst){
-        file_put_contents($this->tbpath, NULLTPL);
+        $this->tbdata = NULLTPL;
+        $this->_saveData();
         return true;
       } else {
         throw new Exception('cdb table "'.$this->tbname.' already exists.');
@@ -134,6 +144,15 @@
         throw new Exception('cdb table "'.$this->tbname.' does not exist.');
         return 0;
       }
+    }
+
+
+    /**
+     * Return the table data as a raw array
+     * @return array $data The data array
+     */
+    public function raw(){
+      return $this->tbdata['data'];
     }
 
   }
