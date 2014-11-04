@@ -12,69 +12,56 @@
  */
 
   class crunchDB {
+    
+    public $dbdir;
+    public $dbmod;
+    public $dbext;
 
-    protected $dbdir;
-    protected $dbext;
-    protected $dbmode;
 
     /**
-     * Create new CrunchDB instance with needed parameters
+     * Create a new instance of crunchdb with the given settings
+     * 
      * @param string $dbdir Directory with all database files
+     * @param string $dbmod Database access mode, can be read(r) or read-write (rw)
      * @param string $dbext File extension of the database files, usually .json
-     * @param string $dbmode Database access mode, can be read(r), write(w) or (rw)
      */
-    public function __construct($dbdir='/', $dbext='json', $dbmode='rw'){
-      if(in_array($dbmode, array('r', 'w', 'rw'))) $this->dbmode = $dbmode;
-      else throw new Exception('crunchDB: Invalid mode, only accetps [r,w,rw]');
-      if(preg_match("#[a-z0-9]{1,4}#", $dbext)) $this->dbext  = $dbext;
-      else throw new Exception('crunchDB: Invalid file extension');
-      if(is_dir($dbdir)) $this->dbdir = $dbdir;
-      else throw new Exception('crunchDB: Invalid directory');
-      if(substr($this->dbdir, -1) != '/') $this->dbdir.='/';
-    }
+    public function __construct($dbdir = './', $dbmod = 'rw', $dbext = 'json'){
 
-    /**
-     * Handle any calls to the crunchDB instance and trigger the respective function
-     * @param string $func The name of the function to trigger
-     * @param array $args An array with all arguments that will be passed to the function
-     */
-    public function __call($func, $args){
-      $handleInRoot = array('create', 'drop', 'alter', 'truncate', 'tables', 'version');
-      if($func != 'select' && $this->dbmode == 'r') throw new Exception('CrunchDB is running in read mode');
-      if(in_array($func, $handleInRoot)) return call_user_func_array(array($this->_crunchRoot(), $func), $args);
-      if(method_exists('crunchTable', $func)){
-        $target = $args[0]; array_splice($args, 0, 1);
-        return call_user_func_array(array($this->_crunchTable($target), $func), $args);
+      if(is_dir($dbdir)) {
+        if(substr($dbdir, -1) != '/') $dbdir .= '/';
+        $this->dbdir = $dbdir;
       }
-      throw new Exception('crunchDB: Can\'t handle the action "'.$func.'"');
+      else throw new Exception('cdb path "'.$dbdir.'" does not exist.');
+
+      if(in_array($dbmod, array('r', 'rw'))) $this->dbmod = $dbmod;
+      else throw new Exception('cdb database mode can only be "r" or "rw".');
+
+      if(substr($dbext, 0, 1) != '.') $dbext = '.'.$dbext;
+      $this->dbext = $dbext;
     }
 
-    /**
-     * Return a new instance of a crunchDB table
-     * @param string $tablename The respective table's name
-     * @return object The new crunchTable instance
-     */
-    protected function _crunchTable($tablename){
-      if(!$this->hasTable($tablename)) throw new Exception('crunchDB: Invalid table name "'.$tablename.'"');
-      else return new crunchTable($this->dbdir.$tablename.'.'.$this->dbext);
-    }
 
     /**
-     * Return a new instance of the crunchDB root controller
-     * @return object The new crunchRoot instance
+     * Return an instance of the selected table for further actions
+     *
+     * @param string $name Name of the selected table
      */
-    protected function _crunchRoot(){
-      return new crunchRoot($this->dbdir, $this->dbext);
+    public function table($name){
+      return new crunchTable($this, $name);
     }
 
+
     /**
-     * Check if a table exists by searching for the respective file
-     * @param string $tablename The respective table's name
-     * @return boolean Indicates wether the table exists or not
+     * Return a list of all tables
      */
-    protected function hasTable($tablename){
-      return file_exists($this->dbdir.$tablename.'.'.$this->dbext);
+    public function tables(){
+      $tablelist = array();
+      if($dbdir = opendir($this->dbdir)){
+        while (($file = readdir($dbdir)) !== false)
+          if(strstr($file, $this->dbext)) $tablelist[] = str_replace($this->dbext, '', $file);
+        closedir($dbdir);
+      }
+      return $tablelist;
     }
   }
-
 ?>
