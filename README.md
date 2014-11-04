@@ -12,19 +12,42 @@ Here's a list of all functions that are currently implemented.
 `$cdb = new crunchDB('./db/', 'json', 'rw')` Initialize crunchdb with the following parameters:  
 **directory** - The path to the directory where all the json files will be stored in.  
 **extension** - The extension of the db files. (This parameter is optional, it is set to `json` as default)  
-**db mode** - The database access mode. Can be read(r), write(w) or (rw).  (This parameter is optional, it is set to `rw` as default)
+**db mode** - The database access mode. Can be read(r) or (rw).  (This parameter is optional, it is set to `rw` as default, **It is not yet implemented!**)
 
 | Method | Description |
 | --- | --- |
 | `crunchDB->version()` | Return the current crunchDB version. Useful to see if everything is set up. |
 | `crunchDB->tables()` | List all tables (=files) that are present in this database (=directory). |
-| `crunchDB->create('table')` | Add a new table (eq. a new JSON file) with the given name. |
-| `crunchDB->truncate('table')` | Truncate the table with the given name.|
-| `crunchDB->drop('table')` | Drop the table with the given name and delete its JSON file.|
-| `crunchDB->alter('table', 'newname)` | Rename the table called `tablename` to `newname`.|
-| `crunchDB->insert('table', array())` | Insert a row with the information stored in the `data` array into the table `tablename`.|
-| `crunchDB->count('table', 'key', 'value')` | Count all entries in the table `tablename` where `key` matches `value`. You can use `count('table', '*')` to count **all** entries in this table.|
-| `crunchDB->select('table', 'key', 'value')` | Select all entries in the table `tablename` where `key` matches `value`. You can use `count('table', '*')` to select **all** entries in this table.|
-| `crunchDB->update('table', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. All fields that are set in the array will be updated. |
-| `crunchDB->updateAll('table', 'key', 'value', array('key' => 'value')` | Update all entries in the table `tablename` where `key` matches `value`. The full row will be replaced with the given array. |
-| `crunchDB->delete('table', 'key', 'value')` | Delete all entries in the table `tablename` where `key` matches `value`. You can use `count('tablename', '*')` to delete **all** entries in this table (=truncate).|
+| `crunchDB->table('name')` | Get the object of a crunchDB table `cdbTable`. |
+| -- | -- | 
+| `cdbTable->truncate()` | Truncate the given table object.|
+| `cdbTable->drop()` | Drop the given table object and delete its JSON file.|
+| `cdbTable->alter('name')` | Rename the table object's file and table to `name`.|
+| `cdbTable->raw()` | Get the raw json data of the table's content.|
+| `cdbTable->count()` | Count all rows in this table. This is equal to `->select('*')->count()`.|
+| `cdbTable->insert('data')` | Insert an array of data, crunchDB will not check it's structure! |
+| `cdbTable->select(XXXX)` | Select rows from the table, see explanation of XXXX below! Returns resouce `cdbRes` |
+| -- | -- | 
+| `cdbRes->sort(YYYY)` | Sort rows in the resource, see explanation of YYYY below! |
+| `cdbRes->sortfn('func')` | Sort rows in the resource via usort with a custom function (PHP 5.3+) |
+| `cdbRes->count()` | Count all the rows in this resource |
+| `cdbRes->fetch()` | Fetch all the rows in this resource |
+| `cdbRes->delete()` | Fetch all the rows in this resource from the table |
+| `cdbRes->update(ZZZZ)` | Update all the rows in this resource from the table, see explanation of ZZZZ below |
+
+
+#### Parameter explanation
+**XXXX** is the multi array parameter for select. You can add multiple keys to filter for, for example `['type', '==', 'user']` would search for all rows where the column `type` equals 'user'. Hereby, the first element is the **key** to search for, the second one the **compare operator** (`<`, `<=`, `==`, `>=` or `>`), the third one the respective **value** to compare and the optional fourth parameter can be an `'and'`. You can also chain select parameters as following:  
+`...->select(['type', '==', 'user'],['type', '==', 'admin'])->...` Search for rows with the type `user` **OR** `admin`  
+`...->select(['type', '==', 'user'],['name', '==', 'cybrox', 'and'])->...` Search for rows with the type `user` **AND** the `name` 'cybrox'  
+  
+**YYYY** is the multi array parameter for sorting. You can add multiple keys to sort by, for exmaple `['name']` or `['name', SORT_DESC]`. Each array can have up to 3 parameters, that being the column name to sort on (mandatory), either SORT_ASC or SORT_DESC (optional) and a projection function (optional).  
+You can also chain sort parameters as following:  
+`['type', SORT_DESC], ['name', SORT_DESC]` Sort by number descending and then by name descending.
+
+**ZZZZ** is the multi array parameter for updating. You can add multiple key-vaule pairs to update here like `['name','cybrox']` or `['type','admin'],['name','cybrox']`
+You can chain as many fields in there as you want to change.
+
+
+#### On chaining actions
+Though chaining a lot of arguments might get a bit long, it's definitely a really simple way to build *queries* for something like this. You can find a lot of examples on how to chain them in the *example.php* file.
