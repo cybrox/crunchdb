@@ -1,45 +1,79 @@
 <?php
 
-  /**
-   * Simple chrunchdb example
-   */
-
+  // Require source files
   require 'src/crunchdb.class.php';
-  require 'src/crunchroot.class.php';
   require 'src/crunchtable.class.php';
+  require 'src/crunchresource.class.php';
 
+  // Creating new cdb instance
   $cdb = new crunchDB('./db/');
 
-  # Create two new tables called 'users' and 'ponies'
-  $cdb->create('users');
-  $cdb->create('ponies');
+  echo '<pre>';
 
-  # Rename table 'ponies' to 'cookies'
-  $cdb->alter('ponies', 'cookies');
 
-  # Drop the table 'cookies'
-  $cdb->drop('cookies'); #echo "ah! hot!"
+//=============================================================================
+//= CrunchDB Examples. e() is a comment, f() contains the respective function =
+//=============================================================================
 
-  # Insert two users to the 'users' table
-  $cdb->insert('users', array('name' => 'cybrox', 'likes' => 'cookies'));
-  $cdb->insert('users', array('name' => 'another', 'likes' => 'bananas'));
+    e( 'Requesting database version' );
+    f( $cdb->version() );
 
-  # Update in 'users' where 'name' matches 'another'
-  $cdb->update('users', 'name', 'another', array('name' => 'xammi', 'likes' => 'cake'));
+    e( 'Check if a table called "cookies" exists ' );
+    f( $cdb->table('cookies')->exists() );
 
-  # Select from 'users' where 'name' equals 'xammi'
-  print_r($cdb->select('users', 'name', 'xammi'));
+    e( 'Creating a table called "cookies" ' );
+    f( $cdb->table('cookies')->create() );
 
-  # Count from 'users' where * (wildcard will loop through all entries)
-  echo '<br />'.$cdb->count('users', '*').' users<br />';
+    e( 'Creating a table called "cakes" ' );
+    f( $cdb->table('cakes')->create() );
 
-  # Delete the user named xammi
-  $cdb->delete('users', 'name', 'xammi');
+    e( 'Rename table "cakes" to "cheese" ' );
+    f( $cdb->table('cakes')->alter('cheese') );
 
-  # Select all users where * (wildcard will select all users)
-  print_r($cdb->select('users', '*'));
+    e( 'Requesting a list of tables in the database');
+    f( $cdb->tables() );
 
-  # Drop the users table to undo everything tested here
-  $cdb->drop('users');
+    e( 'Count all rows in the cookies table ' );
+    f( $cdb->table('cookies')->count() );
+
+    e( 'Insert a chocolate cookie to the cookies table' );
+    f( $cdb->table('cookies')->insert(array("type" => "chocolate", "is" => "nice")) );
+
+    e( 'Insert a stawberry cookie to the cookies table' );
+    f( $cdb->table('cookies')->insert(array("type" => "starberry", "is" => "ok")) );
+
+    e( 'Get the raw dataset from the cookies table' );
+    f( $cdb->table('cookies')->raw() );
+
+    e( 'Select all the cookies from the cookie table' );
+    f( $cdb->table('cookies')->select('*') );
+
+    e( 'Count all the cookies from the cookie table' );
+    f( $cdb->table('cookies')->select('*')->count() );
+
+    e( 'Sort the selected cookies alphabetically and fetch the result' );
+    f( $cdb->table('cookies')->select('*')->sort(['type'])->fetch() );
+
+    e( 'Dropping all tables to end this test ' );
+    $cdb->table('cookies')->drop();
+    $cdb->table('cheese')->drop();
+
+//=============================================================================
+//=============================================================================
+//=============================================================================
+
+  echo '</pre>';
+
+
+  // Functions to display stuff
+  function e($in){ echo $in; }
+  function f($in){
+    echo '
+';
+    var_dump($in);
+    echo '
+
+';
+  }
 
 ?>
