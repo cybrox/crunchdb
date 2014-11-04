@@ -23,10 +23,10 @@
      * Create a new instance of crunchdb with the given settings
      * 
      * @param string $dbdir Directory with all database files
-     * @param string $dbmod Database access mode, can be read(r) or read-write (rw)
      * @param string $dbext File extension of the database files, usually .json
+     * @param string $dbmod Database access mode, can be read(r) or read-write (rw)
      */
-    public function __construct($dbdir = './', $dbmod = 'rw', $dbext = 'json'){
+    public function __construct($dbdir = './', $dbext = 'json', $dbmod = 'rw'){
 
       if(is_dir($dbdir)) {
         if(substr($dbdir, -1) != '/') $dbdir .= '/';
@@ -49,6 +49,14 @@
      */
     public function table($name){
       return new crunchTable($this, $name);
+    }
+
+
+    /**
+     * Return the current crunchDB version for testing
+     */
+    public function version(){
+      return "2.0.0";
     }
 
 
