@@ -123,11 +123,11 @@
 
     /**
      * Select stuff from a table
-     * @param string $query SQL style query to select entries
+     * @param arrays $select Multiple arrays for filtering
      * @return instance $crunchResource New resource instance
      */
-    public function select($query){
-      return new crunchResource($this, $query);
+    public function select(){
+      return new crunchResource($this, func_get_args());
     }
 
 
