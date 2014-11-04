@@ -15,27 +15,91 @@
   class crunchResource {
 
     private $data;
+    private $rawd;
+    private $filt = false;
 
 
     /**
      * Create a new instance of a crunch resource
      * @param instance $base Instance of the data's table
-     * @param string $query SQL like query string to select
+     * @param arrays $query Multiple arrays for filtering
      */
     public function __construct($base, $query){
-      $this->data = $base->raw();
+      $this->tweak($base->raw());
       $this->apply($query);
     }
 
 
     /**
-     * Apply the given query to the dataset
-     * @param string $query The given query
+     * Append internal id's to the rows to prevent overlaps
+     * when filtering with or connectors
      */
-    private function apply($query){
-      $query = trim($query);
+    private function tweak($input){
+      $counter = 0;
+      foreach($input as $inp){
+        $inp['__dbid'] = $counter;
+        $this->data[] = $inp;
+        $counter++;
+      }
+      $this->rawd = $this->data;
+    }
 
-      if($query == '*') return;
+
+    /**
+     * Apply the given query to the dataset
+     * @param string $queries The given query
+     */
+    private function apply($queries){
+      foreach($queries as $query){
+        if(count($query) < 3) continue;
+
+        $key = (!empty($query[0])) ? $query[0] : '';
+        $con = (!empty($query[3])) ? $query[3] : 'or';
+
+        if($key == '*') return;
+        if($con == 'or') $this->check($this->rawd, $query);
+        else $this->check($this->data, $query);
+      }
+    }
+
+
+    /**
+     * Compare datasets. - Used for select queries.
+     */
+    private function check($dataset, $query){
+      $resd = array();
+      $uids = array();
+
+      $key = (!empty($query[0])) ? trim($query[0]) : '';
+      $com = (!empty($query[1])) ? trim($query[1]) : '==';
+      $val = (!empty($query[2])) ? trim($query[2]) : '';
+      $con = (!empty($query[3])) ? trim($query[3]) : 'or';
+
+      foreach($this->data as $d) array_push($uids, $d['__dbid']);
+
+      foreach($dataset as $data){
+        if(!empty($data[$key])){
+          if(
+            ($data[$key] <= $val && $com == '<=') ||
+            ($data[$key] <  $val && $com == '<' ) ||
+            ($data[$key] == $val && $com == '==') ||
+            ($data[$key] <= $val && $com == '>=') ||
+            ($data[$key] >  $val && $com == '>' )) {
+            array_push($resd, $data);
+          }
+        }
+      }
+
+
+      if($con == 'and' || !$this->filt) $this->data = $resd;
+      else {
+        foreach($resd as $r){
+          if(!in_array($r['__dbid'], $uids))
+            array_push($this->data, $r);
+        }
+      }
+
+      $this->filt = true;
     }
 
 
@@ -68,7 +132,14 @@
      * @return array $data The fetched data array
      */
     public function fetch(){
-      return $this->data;
+      $res = array();
+
+      foreach($this->data as $data){
+        unset($data['__dbid']);
+        array_push($res, $data);
+      }
+
+      return $res;
     }
 
 
