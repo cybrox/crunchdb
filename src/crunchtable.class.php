@@ -11,8 +11,6 @@
  * Named after delicious cookies!
  */
 
-  define("NULLTPL", "{\"data\":[]}");
-
 
   class crunchTable {
 
@@ -78,7 +76,7 @@
      */
     public function truncate(){
       if($this->tbexst){ 
-        $this->tbdata = NULLTPL;
+        $this->tbdata = array("data"=>array());
         $this->_saveData();
         return true;
       } else {
@@ -94,7 +92,7 @@
      */
     public function create(){
       if(!$this->tbexst){
-        $this->tbdata = NULLTPL;
+        $this->tbdata = array("data"=>array());
         $this->_saveData();
         return true;
       } else {
@@ -112,7 +110,7 @@
     public function alter($name){
       if($this->tbexst){
         $newpath = $this->tbbase->dbdir.$name.$this->tbbase->dbext;
-        file_put_contents($newpath, $this->tbdata);
+        file_put_contents($newpath, json_encode($this->tbdata));
         unlink($this->tbpath);
         $this->tbpath = $newpath;
         return true;
@@ -138,9 +136,9 @@
      * @param array $content The new database entries
      */
     public function insert($data){
-      var_dump($this);
       array_push($this->tbdata['data'], $data);
       $this->_saveData();
+      return true;
     }
 
 
