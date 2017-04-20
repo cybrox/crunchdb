@@ -11,6 +11,7 @@
  * Named after delicious cookies!
  */
 
+  namespace cybrox\crunchdb;
 
   class crunchResource {
 

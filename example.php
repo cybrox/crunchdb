@@ -1,9 +1,12 @@
 <?php
 
-  // Require source files
+  // Require source files (not needed if you use composer)
   require 'src/crunchdb.class.php';
   require 'src/crunchtable.class.php';
   require 'src/crunchresource.class.php';
+
+  // Alias class accessor to omit namespace (optional)
+  use cybrox\crunchdb\crunchDB as crunchDB;
 
   // Creating new cdb instance
   $cdb = new crunchDB('./db/');
