@@ -12,6 +12,7 @@
  */
 
   namespace cybrox\crunchdb;
+  use \Exception;
 
   class crunchTable {
 
