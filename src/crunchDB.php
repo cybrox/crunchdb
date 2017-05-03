@@ -14,7 +14,7 @@
   namespace cybrox\crunchdb;
   use \Exception;
 
-  class crunchDB {
+  class CrunchDB {
     
     public $dbdir;
     public $dbmod;

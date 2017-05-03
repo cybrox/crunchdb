@@ -9,7 +9,7 @@ This repository contains a `src` directory which contains all the chrunchDB file
 So, obviously, crunchDB needs to have some sort of functionality. It would be pretty useless otherwise, wouldn't it?  
 Here's a list of all functions that are currently implemented.
 
-`$cdb = new crunchDB('./db/', 'json', 'rw')` Initialize crunchdb with the following parameters:  
+`$cdb = new CrunchDB('./db/', 'json', 'rw')` Initialize crunchdb with the following parameters:  
 - **directory** - The path to the directory where all the json files will be stored in.  
 - **extension** - The extension of the db files. (This parameter is optional, it is set to `json` as default)  
 - **db mode** - The database access mode. Can be read(r) or (rw). (Not yet implemented!)

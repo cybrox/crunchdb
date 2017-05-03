@@ -14,7 +14,7 @@
   namespace cybrox\crunchdb;
   use \Exception;
 
-  class crunchTable {
+  class CrunchTable {
 
     private $tbname;
     private $tbexst;

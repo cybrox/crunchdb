@@ -13,7 +13,7 @@
 
   namespace cybrox\crunchdb;
 
-  class crunchResource {
+  class CrunchResource {
 
     private $base;
     private $data;

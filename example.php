@@ -6,10 +6,10 @@
   require 'src/crunchResource.php';
 
   // Alias class accessor to omit namespace (optional)
-  use cybrox\crunchdb\crunchDB as crunchDB;
+  use cybrox\crunchdb\CrunchDB as CrunchDB;
 
   // Creating new cdb instance
-  $cdb = new crunchDB('./db/');
+  $cdb = new CrunchDB('./db/');
 
   echo '<pre>';
 
