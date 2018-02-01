@@ -4,7 +4,7 @@
     "description": "Dead-simple json file based data storage for php applications",
     "keywords": ["json","database", "db", "simple"],
     "homepage": "https://github.com/cybrox/crunchdb",
-    "license": "CC BY-SA",
+    "license": "MIT",
     "authors": [
         {
             "name": "Sven Gehring",
