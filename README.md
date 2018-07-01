@@ -22,6 +22,8 @@ Here's a list of all functions that are currently implemented.
 | `crunchDB->tables()` | List all tables (=files) that are present in this database (=directory). |
 | `crunchDB->table('name')` | Get the object of a crunchDB table `cdbTable`. |
 | -- | -- | 
+| `cdbTable->create()` | Create a table and its JSON file with the given name.|
+| `cdbTable->exists()` | Check whether or not a table (file) with the given name exists.|
 | `cdbTable->truncate()` | Truncate the given table object.|
 | `cdbTable->drop()` | Drop the given table object and delete its JSON file.|
 | `cdbTable->alter('name')` | Rename the table object's file and table to `name`.|
