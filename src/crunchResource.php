@@ -163,6 +163,7 @@
      */
     public function delete(){
       foreach($this->data as $d) unset($this->base->tbdata['data'][$d['__dbid']]);
+      $this->base->tbdata['data'] = array_values($this->base->tbdata['data']);
       $this->base->_saveData();
       return true;
     }
