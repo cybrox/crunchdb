@@ -94,7 +94,7 @@ This is the multi-array parameter for updating. You can add multiple key-vaule p
   $cdb->table('cookies')->select(['type', '==', 'chocolate'],['type', '==', 'banana', 'and'])->count();
   $cdb->table('cookies')->select('*')->sort(['type'])->fetch();
   $cdb->table('cookies')->select(['type', '==', 'strawberry'])->delete();
-  $cdb->table('cookies')->select(['type', '==', 'banana'])->update(['type', 'chocolate']);
+  $cdb->table('cookies')->select(['type', '==', 'banana'])->update(['type' => 'chocolate']);
   $cdb->table('cookies')->select('*')->fetch();
 
 ?>
