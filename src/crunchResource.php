@@ -174,9 +174,11 @@
      */
     public function update(){
       foreach($this->data as $data){
-        foreach(func_get_args() as $arg){
-          if(array_key_exists($arg['0'], $this->base->tbdata['data'][$data['__dbid']])) {
-            $this->base->tbdata['data'][$data['__dbid']][$arg[0]] = $arg[1];
+        foreach(func_get_args() as $args){
+          foreach($args as $key => $arg) {
+            if(array_key_exists($key, $this->base->tbdata['data'][$data['__dbid']])) {
+              $this->base->tbdata['data'][$data['__dbid']][$key] = $arg;
+            }
           }
         }
       }
